@@ -108,10 +108,10 @@ bundles.
 - I wanted to rip out a lot of stuff from Evolution7 (release stage/class loader)
 - I didn't want Evolution7's license (pretty sure it should be Wrep's?)
 
-See also the list of [contributors](https://github.com/simpleweb/bugsnag-bundle/contributors).
+See also the list of [contributors](https://github.com/simpleweb/BugsnagBundle/contributors).
 
 
 Reporting an issue or a feature request
 ---------------------------------------
 
-Issues and feature requests are tracked in the [Github issue tracker](https://github.com/simpleweb/bugsnag-bundle/issues). You're very welcome to submit issues or submit a pull request!
+Issues and feature requests are tracked in the [Github issue tracker](https://github.com/simpleweb/BugsnagBundle/issues). You're very welcome to submit issues or submit a pull request!

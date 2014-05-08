@@ -1,33 +1,22 @@
 <?php
-/*
- * This file is part of the Evolution7BugsnagBundle.
- *
- * (c) Evolution 7 <http://www.evolution7.com.au>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-namespace Evolution7\BugsnagBundle\EventListener;
 
-use Evolution7\BugsnagBundle\Bugsnag\ClientLoader,
-    Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+namespace Simpleweb\BugsnagBundle\EventListener;
+
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
  * The BugsnagBundle ShutdownListener.
  *
  * Handles shutdown errors and make sure they get logged.
- *
  */
 class ShutdownListener
 {
     protected $client;
 
     /**
-     * Constructor
-     *
-     * @param \Evolution7\BugsnagBundle\Bugsnag\ClientLoader $client
+     * @param \Bugsnag_Client $client
      */
-    public function __construct(ClientLoader $client)
+    public function __construct(\Bugsnag_Client $client)
     {
         $this->client = $client;
     }
@@ -56,6 +45,7 @@ class ShutdownListener
         }
 
         $fatal  = array(E_ERROR,E_PARSE,E_CORE_ERROR,E_COMPILE_ERROR,E_USER_ERROR,E_RECOVERABLE_ERROR);
+
         if (!in_array($error['type'], $fatal)) {
             return;
         }
@@ -64,7 +54,8 @@ class ShutdownListener
         $message   = sprintf($message, $error['message']);
         $backtrace = array(array('file' => $error['file'], 'line' => $error['line']));
 
-        $this->client->notifyOnError($message, $backtrace);
+        $this->client->notifyError('Error', $message, $backtrace);
+
         error_log($message.' in: '.$error['file'].':'.$error['line']);
     }
 }

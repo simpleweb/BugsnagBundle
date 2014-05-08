@@ -1,29 +1,22 @@
-parameters:
-    bugsnag.api_key:
-    bugsnag.client.class: Evolution7\BugsnagBundle\Bugsnag\ClientLoader
-    bugsnag.exception_listener.class: Evolution7\BugsnagBundle\EventListener\ExceptionListener
-    bugsnag.shutdown_listener.class: Evolution7\BugsnagBundle\EventListener\ShutdownListener
-
 services:
-    bugsnag.release_stage:
-        class: %bugsnag.release_stage.class%
-
     bugsnag.client:
-        class: Bugsnag_Client
+        class: %bugsnag.client%
         arguments: [%bugsnag.api_key%]
-
-    bugsnag.clientloader:
-        class: %bugsnag.client.class%
-        arguments: [@bugsnag.client, @bugsnag.release_stage, @service_container]
+        calls:
+            - [setReleaseStage, ['%kernel.environment%']]
+            - [setNotifyReleaseStages, ['%bugsnag.notify_stages%']]
+            # - [setProjectRoot(realpath, ['%kernel.root_dir%/..']]
+            - [setProxySettings, ['%bugsnag.proxy%']]
+            - [setAppVersion, ['%bugsnag.app_version%']]
 
     bugsnag.exception_listener:
-        class: %bugsnag.exception_listener.class%
-        arguments: [@bugsnag.clientloader]
+        class: %bugsnag.exception_listener%
+        arguments: [@bugsnag.client]
         tags:
-                    - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
     bugsnag.shutdown_listener:
-        class: %bugsnag.shutdown_listener.class%
-        arguments: [@bugsnag.clientloader]
+        class: %bugsnag.shutdown_listener%
+        arguments: [@bugsnag.client]
         tags:
-                    - { name: kernel.event_listener, event: kernel.controller, method: register }
+            - { name: kernel.event_listener, event: kernel.controller, method: register }

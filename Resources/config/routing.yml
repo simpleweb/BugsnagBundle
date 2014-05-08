@@ -1,7 +1,7 @@
-evolution7_bugsnag_test_exception:
-    pattern:  /exception
-    defaults: { _controller: BugsnagBundle:Default:exception }
+simpleweb_bugsnag_test_exception:
+    pattern: /exception
+    defaults: { _controller: SimplewebBugsnagBundle:Default:exception }
 
-evolution7_bugsnag_test_error:
+simpleweb_bugsnag_test_error:
     pattern: /error
-    defaults: { _controller: BugsnagBundle:Default:error }
+    defaults: { _controller: SimplewebBugsnagBundle:Default:error }

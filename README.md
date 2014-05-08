@@ -1,103 +1,117 @@
-# Evolution7BugsnagBundle #
-Enables Bugsnag integration into your Symfony2 application, using the [bugsnag-php](https://github.com/bugsnag/bugsnag-php) 2.x library from Bugsnag.
+SimplewebBugsnagBundle
+======================
 
-# Installation #
-The recommended way of installing this bundle is using [Composer](http://getcomposer.org/). 
+Symfony2 [bugsnag-php](https://github.com/bugsnag/bugsnag-php) 2.x integration.
 
-Add this repository to your composer information using the following command
 
-```bash
-composer require "evolution7/bugsnag-bundle:1.*"
-```
+Installation Instructions
+-------------------------
 
-Add the bundle to your AppKernel.php:
+### Step 1: Download the BugsnagBundle using composer
+
+The best way to install the bundle is by using [Composer](http://getcomposer.org). Execute the following command:
+
+`composer require simpleweb/bugsnag-php-symfony`
+
+### Step 2: Include the bundle in your AppKernel
+
+*app/AppKernel.php*
 
 ```php
-$bundles = array(
-    //Other Bundles
-    new Evolution7\BugsnagBundle\BugsnagBundle(),
+public function registerBundles()
+{
+    $bundles = array(
+        ...
+        new Simpleweb\BugsnagBundle\SimplewebBugsnagBundle()
+        ...
+    );
+}
 ```
 
-Define your Bugsnag API key in the config.yml
+### Step 3: Configuration
 
-```yml
+*app/config/config.yml*
+
+```yaml
 bugsnag:
-    api_key: YOUR-API-KEY
-```
+    # required
 
-# Usage #
-After the installation the bundle works without any additional settings required, but you can tweak some settings.
+    api_key: your api key
 
-## Notify Stages ##
-You can set for which environments you want Bugsnag to get error reports. This is done with the notify_stages setting:
+    # optional
 
-```yml
-bugsnag:
-    notify_stages: [development, staging, production]
-```
-
-The default is to report bugs in staging and production environments.
-
-### Development mode ###
-By default errors in development (app_dev.php) mode will not be reported to Bugsnag. You can override this behaviour with the below setting.
-
-```yml
-bugsnag:
-    report_in_dev: true
-```
-
-## Proxy ##
-If your server requires you to access Bugsnag through a proxy, you can set this up easily as well. Just use the following example to configure the settings you need in your config.yml:
-
-```yml
-bugsnag:
+    app_version: ~ # useful if you version your app
+    notify_stages: [ stage, prod ] # default
     proxy:
-        host: www.bugsnag.com
-        port: 42
-        user: username
-        password: password
+        host: ~
+        port: ~
+        user: ~
+        password: ~
 ```
 
-The only of these settings that is mandatory is the host, all others can be left out if they aren't required.
+### Step 4 (optional): Reporting errors from custom commands
 
-## AppVersion ##
-If you tag your app releases with version numbers, Bugsnag can display these on your dashboard if you set this:
+By default, this bundle does not handle errors and exceptions that are raised from custom commands.
 
-```yml
-bugsnag:
-    app_version: v1.2.3
+#### Altering the `console` file
+
+*app/console*
+
+Swap:
+
+```php
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+```
+For:
+
+```php
+use Simpleweb\BugsnagBundle\Console\Application;
 ```
 
-## Testing ##
+
+License
+-------
+
+This bundle is under the MIT license. See the complete license in the bundle:
+
+    Resources/meta/LICENSE
+
+
+Testing
+-------
+
 Included in the bundle is a controller that will allow you to test if your site is hooked up correctly. Just add the following to your routing.yml:
 
 ```yml
-evolution7_bugsnag_bundle:
-    resource: "@BugsnagBundle/Resources/config/routing.yml"
-    prefix:   /bugsnagtest
+simpleweb_bugsnag_bundle:
+    resource: "@SimplewebBugsnagBundle/Resources/config/routing.yml"
+    prefix:   /bugsnag
 ```
 
-And then afterwards you can access `your.domain/bugsnagtest/exception` and `your.domain/bugsnagtest/error` which should then send errors to your configured Bugsnag project.
+And then afterwards you can access `your.domain/bugsnag/exception` and `your.domain/bugsnag/error` which should then send errors to your configured Bugsnag project.
 
-# Advanced Usage #
 
-## Release Stage Class ##
-Bugsnag allows you to determine which release stage you are currently in, the Evolution7BugsnagBundle uses a ReleaseStage class for this which determines this based on the path. Depending on your setup you might want to have a different way of determining this, in which case it is possible to override this by providing your own ReleaseStage class.
-You can implement a class that implements the `Evolution7\BugsnagBundle\ReleaseStage\ReleaseStageInterface` and provide its name as a parameter in your config.yml
+Contributors
+------------
 
-```yml
-bugsnag:
-    release_stage:
-        class: Your\Name\Space\ClassName
-```
+A lot of this code is based on the
+[wrep](https://github.com/wrep/bugsnag-php-symfony)
+and
+[evolution7](https://github.com/evolution7/Evolution7BugsnagBundle)
+bundles.
 
-# Contributing #
+### Why yet another bundle? ###
 
-* Fork it on Github
-* Commit and push until you are happy
-* Run the tests to make sure they all pass: composer install && ./vendor/bin/phpunit
-* Make a pull request
-* Thanks!
+- I wanted to make a number of non-BC changes
+- I wanted some functionality from Evolution7
+- I wanted some functionality from Wrep
+- I wanted to rip out a lot of stuff from Evolution7 (release stage/class loader)
+- I didn't want Evolution7's license (pretty sure it should be Wrep's?)
 
-# Acknowledgement #
-Parts of this code are based on the [bugsnag-php-symfony Bundle](https://github.com/wrep/bugsnag-php-symfony)
+See also the list of [contributors](https://github.com/simpleweb/bugsnag-bundle/contributors).
+
+
+Reporting an issue or a feature request
+---------------------------------------
+
+Issues and feature requests are tracked in the [Github issue tracker](https://github.com/simpleweb/bugsnag-bundle/issues). You're very welcome to submit issues or submit a pull request!

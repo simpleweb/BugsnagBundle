@@ -33,7 +33,7 @@ public function registerBundles()
 *app/config/config.yml*
 
 ```yaml
-bugsnag:
+simpleweb_bugsnag:
     # required
 
     api_key: your api key

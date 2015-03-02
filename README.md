@@ -11,7 +11,7 @@ Installation Instructions
 
 The best way to install the bundle is by using [Composer](http://getcomposer.org). Execute the following command:
 
-`composer require simpleweb/bugsnag-php-symfony`
+`composer require simpleweb/bugsnag-bundle`
 
 ### Step 2: Include the bundle in your AppKernel
 

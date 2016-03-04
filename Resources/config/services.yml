@@ -5,18 +5,17 @@ services:
         calls:
             - [setReleaseStage, ['%kernel.environment%']]
             - [setNotifyReleaseStages, ['%bugsnag.notify_stages%']]
-            # - [setProjectRoot(realpath, ['%kernel.root_dir%/..']]
             - [setProxySettings, ['%bugsnag.proxy%']]
             - [setAppVersion, ['%bugsnag.app_version%']]
 
     bugsnag.exception_listener:
         class: %bugsnag.exception_listener%
-        arguments: [@bugsnag.client]
+        arguments: ["@bugsnag.client"]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
     bugsnag.shutdown_listener:
         class: %bugsnag.shutdown_listener%
-        arguments: [@bugsnag.client]
+        arguments: ["@bugsnag.client"]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: register }
